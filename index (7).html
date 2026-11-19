@@ -96,7 +96,7 @@ nav button{flex:none;background:none;border:1px solid #8b1a2f66;color:var(--w);p
 <div id="st"><div id="sbg"></div><div id="bars"></div><button id="sx">✕</button><img id="sim" alt=""><div id="sc"></div></div>
 <script>
 /* ===== EDITA SOLO ESTA PARTE ===== */
-const C={desde:"2025-10-03T00:00:00",principal:1,total:127,carpeta:"fotos/",video:"video.mp4",
+const C={desde:"2025-10-03T00:00:00",principal:1,total:127,carpeta:"",video:"video.mp4",
  cancion:"Nuestra canción",artista:"La que empezó todo",
  cierre:"Te amo, mi reina 💞",wa:"593981775155"};
 const PALABRAS=["Desde el <b>{fecha}</b> mi vida tiene otro color: el tuyo.","Hoy ya son <b>{dias} días</b> juntos, y cada uno me ha enseñado algo nuevo de ti y de mí.","Contigo aprendí que amar es cuidar, compartir y soñar juntos. Eres mi lugar seguro, mi risa favorita y mi mejor decisión.","No existen palabras suficientes para describir lo que siento. Eres mi hogar, mi felicidad y mi amor.","Prometo amarte hoy, mañana y siempre."];
@@ -113,7 +113,7 @@ $('fra').innerHTML=FRASES.map((f,i)=>`<div class="fr rv" style="--t:${i%2?1.2:-1
 const ob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('ver');ob.unobserve(e.target)}}),{threshold:.25});
 document.querySelectorAll('.rv').forEach(x=>ob.observe(x));
 const U={};let ok=[];
-function fb(i){const n=+i.dataset.n,e=(+i.dataset.e||0)+1;if(e<EX.length){i.dataset.e=e;i.src='fotos/'+pad(n)+EX[e]}else i.remove()}
+function fb(i){const n=+i.dataset.n,e=(+i.dataset.e||0)+1;if(e<EX.length){i.dataset.e=e;i.src=C.carpeta+pad(n)+EX[e]}else i.remove()}
 async function det(){const ns=Array.from({length:C.total},(_,i)=>i+1);
  await Promise.all(ns.map(async n=>{for(const e of EX.slice(0,3)){try{const r=await fetch(C.carpeta+pad(n)+e,{method:'HEAD'}),ct=r.headers.get('content-type')||'image';if(r.ok&&ct.startsWith('image')){U[n]=C.carpeta+pad(n)+e;return}}catch(x){}}}));
  ok=ns.filter(n=>U[n]);if(!ok.length){ok=ns;ns.forEach(n=>U[n]=C.carpeta+pad(n)+'.jpg')}}
@@ -146,60 +146,4 @@ function ver(){clearTimeout(tm);if(si>=sl.length)return fin();if(si<0)si=0;
  const m=$('sim');m.classList.remove('in');void m.offsetWidth;m.src=U[sl[si]];m.style.setProperty('--og',rnd(['30% 30%','70% 40%','50% 75%']));m.classList.add('in');
  $('sbg').style.backgroundImage=`url(${U[sl[si]]})`;esc(FS[si%FS.length]);tm=setTimeout(()=>{si++;ver()},5000)}
 function fin(){clearTimeout(tm);clearInterval(ty);$('st').classList.remove('on');document.body.classList.remove('x')}
-function hist(){const k=Math.max(1,Math.ceil(ok.length/28));sl=ok.filter((_,i)=>i%k==0);si=0;$('bars').innerHTML=sl.map(()=>'<i></i>').join('');$('st').classList.add('on');document.body.classList.add('x');if(au.paused)au.play().catch(()=>{});ver()}
-$('st').onclick=e=>{if(e.target.closest('button'))return;si+=e.clientX<innerWidth/3?-1:1;ver()};$('sx').onclick=fin;
-const au=$('au');au.ontimeupdate=()=>$('pf').style.width=(au.currentTime/(au.duration||1)*100)+'%';
-const est=()=>{$('mus').classList.toggle('on',!au.paused);$('pp').textContent=au.paused?'▶':'❚❚';$('mb').textContent=au.paused?'🔇':'🎵'};au.onplay=au.onpause=est;
-$('pp').onclick=$('mb').onclick=()=>au.paused?au.play().catch(()=>{}):au.pause();
-$('ab').onclick=()=>{$('sobre').classList.add('a');document.body.classList.remove('x');$('mb').style.display='block';au.play().catch(()=>{})};
-$('fm').textContent=C.cierre;
-const cv=$('pt'),cx=cv.getContext('2d');let W,H;const med=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight};addEventListener('resize',med);med();
-const nw=a=>({x:Math.random()*W,y:a?-20:Math.random()*H,s:12+Math.random()*14,v:.4+Math.random()*.8,o:Math.random()*6,e:rnd(['🌸','💗','🌹','💖'])});const it=Array.from({length:16},()=>nw(0));
-(function f(){cx.clearRect(0,0,W,H);it.forEach(p=>{p.y+=p.v;p.o+=.02;cx.font=p.s+'px serif';cx.globalAlpha=.55;cx.fillText(p.e,p.x+Math.sin(p.o)*20,p.y);if(p.y>H+20)Object.assign(p,nw(1))});requestAnimationFrame(f)})();
-
-const NM=['🏠 Inicio','💌 Carta','📜 Poemas','✍️ Versos','🎮 Juegos','🔥 Versos exóticos','🎁 Deseos','📸 Collage'];
-$('nv').innerHTML=NM.map((n,i)=>`<button data-i="${i}"${i?'':' class="on"'}>${n}</button>`).join('');
-$('nv').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i;
- document.querySelectorAll('.pn').forEach((p,j)=>p.classList.toggle('on',i==j));[...$('nv').children].forEach((x,j)=>x.classList.toggle('on',i==j));
- b.scrollIntoView({inline:'center',block:'nearest'});scrollTo(0,0);if(!done[i]){done[i]=1;requestAnimationFrame(()=>esp($('p'+i)))}};
-const CARTA=["Rosa, quiero que este pequeño regalo sea una muestra del cariño que tengo por ti. Gracias por cada sonrisa, cada conversación y cada momento que se convirtió en un recuerdo especial.","Te quiero mucho. 💜","Hay fechas que simplemente pasan, y hay fechas que se quedan guardadas para siempre.","Gracias, Rosa, por cada instante que compartimos, por los momentos bonitos y por formar parte de mi vida.","💜 Feliz aniversario. 💜","Rosa, quería regalarte un pequeño pedacito de mi universo. 🌌💜","Entre millones de estrellas, tú eres mi favorita.","Te quiero mucho, Rosa. 💜"];
-$('car').innerHTML=CARTA.map(p=>`<p class="rv">${p.replace('{fecha}',fecha).replace('{dias}',dias)}</p>`).join('');
-const VERSOS=[["Hay mil estrellas en el cielo,","pero tú eres mi universo entero."],["Me dijeron que el amor no existía,","y luego te vi sonreír."],["Tus manos y las mías:","el único idioma que necesito."],["Si el mundo se acaba mañana,","quiero que me encuentre contigo."],["Eres mi hoy, mi ayer,","y todos mis mañanas."],["No sé qué hice bien en la vida,","pero el destino me trajo a ti."],["Contigo aprendí que la felicidad","cabe en las cosas más simples."],["Tu risa es la melodía","que mi alma quiere escuchar."],["Quiero ser tu lugar seguro,","tu abrazo al final del día."],["Eres mi pausa favorita","en medio de tanto ruido."],["Si me preguntan qué es el hogar,","pienso en tu nombre."],["Te quiero en lo simple,","en lo difícil y en lo eterno."],["Cada día contigo es un regalo","que no merezco… pero agradezco."],["Entre todas mis casualidades,","tú eres la favorita."]];
-$('ver').innerHTML=VERSOS.map(p=>`<p class="pm rv">${p.join('<br>')}</p>`).join('');
-const EXO=["Tu piel es el mapa<br>donde quiero perderme.","Me desarmas con una mirada<br>y me incendias con un beso.","Que la noche nos encuentre<br>sin prisa y sin nada que decir.","Tu voz en mi oído<br>es mi secreto más peligroso.","Eres mi tentación favorita<br>y no pienso resistirme.","Bésame despacio,<br>que el tiempo se rinda a nuestros pies.","Tus labios son mi destino<br>y yo, un viajero sin ganas de volver.","Quiero aprenderme tu cuerpo<br>como se aprende un poema: despacio y de memoria.","Hay miradas que queman<br>y la tuya me deja en llamas.","Tus manos en mi cintura<br>y el mundo deja de existir.","Con un roce tuyo<br>se me olvida hasta mi nombre.","Eres fuego lento,<br>y yo, el que se quiere quemar.","Dime al oído lo que piensas,<br>que esta noche no tengo prisa.","Tu risa me enciende,<br>tu abrazo me calma, tu beso me pierde.","Me gusta cómo me miras<br>cuando crees que no me doy cuenta.","Quédate esta noche,<br>y que la luna sea cómplice.","Tu aroma en mi almohada<br>es mi mejor pecado.","Que se apaguen las luces,<br>que yo ya te veo con el alma.","Bailemos pegados,<br>que la música sobra cuando hay tanto que sentir.","Provócame con la mirada,<br>que yo respondo con un beso largo.","Entre tus brazos aprendí<br>que el cielo también se toca.","Hoy no quiero palabras,<br>solo tu boca diciéndome todo."];
-$('exo').innerHTML=EXO.map(t=>`<p class="ex rv">${t}</p>`).join('');
-const DES=["Una cena hecha por mí 🍝","Un masaje de 20 minutos 💆‍♀️","Un día de películas, sin celular 🎬","Un paseo de la mano 🚶‍♀️","Un desayuno en la cama ☕","Una escapada a donde tú elijas ✈️","Un baile en la sala 💃","Una carta escrita a mano 💌","Un antojo cumplido, el que sea 🍫","Una noche mirando estrellas 🌙","Mil besos, sin límite 😘","Deseo libre: pídeme lo que quieras 💗"];
-const HC=["11rchfq3wpe","1v4i2tzbgfg","1v34b396ac6","1ruc7vwwvsa","189qanae7s4","t0isqjqk20","2018t262nsq","27j6r3npn64","dlmbill4lr","47dsicnsl","1etokbsoj05","13l94vf0nhu"];
-const hh=s=>{let a=3735928559,b=1103547991;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,2654435761);b=Math.imul(b^c,1597334677)}a=Math.imul(a^(a>>>16),2246822507)^Math.imul(b^(b>>>13),3266489909);b=Math.imul(b^(b>>>16),2246822507)^Math.imul(a^(a>>>13),3266489909);return(4294967296*(2097151&b)+(a>>>0)).toString(36)};
-function deseos(){const g=$('des'),ls=k=>{try{return localStorage.getItem(k)}catch(e){}},ss=k=>{try{localStorage.setItem(k,1)}catch(e){}};
- g.innerHTML=DES.map((t,i)=>`<div data-i="${i}">🔒</div>`).join('');
- const lock=d=>{d.className='';d.innerHTML='🔒<small>Toca e ingresa tu código</small>'},
- ask=d=>{d.className='on';d.innerHTML='<small>Ingresa tu código 🔒</small><input maxlength="14" autocapitalize="characters" placeholder="CÓDIGO"><button class="bt" data-u>Abrir</button><small class="er"></small>'},
- draw=(d,i)=>{const c=ls('dz'+i);d.className='on'+(c?' ok':'');d.innerHTML=DES[i]+(c?'<small>Canjeado ✓</small>':'<button class="bt" data-c>Canjear 💌</button>')};
- g.querySelectorAll('div').forEach(d=>{const i=d.dataset.i;ls('dzu'+i)?draw(d,i):lock(d)});
- g.onclick=e=>{const d=e.target.closest('.ds>div');if(!d||e.target.tagName=='INPUT')return;const i=d.dataset.i;
-  if(e.target.dataset.u!==undefined){const v=d.querySelector('input').value.toUpperCase().replace(/[^A-Z0-9]/g,'');
-   if(hh('reina'+v)==HC[i]){ss('dzu'+i);draw(d,i)}else{d.querySelector('.er').textContent='Código incorrecto 😘 Se gana con un beso';d.animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}],{duration:250})}}
-  else if(e.target.dataset.c!==undefined){ss('dz'+i);draw(d,i);if(C.wa)open('https://wa.me/'+C.wa+'?text='+encodeURIComponent('Canjeo mi deseo: '+DES[i]),'_blank')}
-  else if(!d.classList.contains('on')&&!ls('dzu'+i))ask(d)}}
-deseos();
-const QZ=[["¿Qué es lo primero que pienso al verte?",[["Tu sonrisa","Esa sonrisa me desarma cada vez 😍"],["Tu risa","Es mi canción preferida 🎶"],["Tus ojos","Me perdería en ellos 👀💖"]]],["¿Cuál sería nuestro plan perfecto?",[["Películas y abrazos","Contigo hasta la peor película es perfecta 🎬"],["Viajar juntos","Voy a cualquier parte de tu mano ✈️"],["Comer rico","Lo mejor del plato es verte disfrutar 🍕"]]],["¿Por cuánto tiempo te voy a querer?",[["Un montón","Un montón es poco: siempre y un poco más ♾️"],["Para siempre","Y si hay otra vida, también en esa 🌹"],["Hasta el infinito","Y de regreso, cuantas veces haga falta 🚀"]]]];
-const RUL=["El universo dice que eres mi mejor decisión 🌌","Hoy te toca un abrazo largo y sin prisa 🤗","Alguien piensa en ti ahora mismo… y soy yo 💭","Eres la razón de mi sonrisa de hoy 😊","Tu futuro incluye muchos besos míos 💋","El destino confirma: eres mi persona favorita 💞"];
-function quiz(el){let i=0;(function v(){if(i>=QZ.length){el.innerHTML='<p class="rs">Gracias por jugar 💖 Todas tus respuestas eran correctas: contigo ninguna sale mal.</p>';return}
- const[q,o]=QZ[i];el.innerHTML=`<p class="rs" style="margin:0 0 8px">${q}</p>`+o.map((x,k)=>`<button class="op" data-k="${k}">${x[0]}</button>`).join('')+'<div class="rs"></div>';
- el.querySelectorAll('.op').forEach(b=>b.onclick=()=>{el.querySelectorAll('.op').forEach(x=>x.disabled=1);const r=el.querySelector('.rs:last-child');r.innerHTML=o[b.dataset.k][1]+'<br><button class="bt">Siguiente 💕</button>';r.querySelector('button').onclick=()=>{i++;v()}})})()}
-function memo(el){const ids=[...ok].sort(()=>Math.random()-.5).slice(0,6),cs=[...ids,...ids].sort(()=>Math.random()-.5);
- el.innerHTML='<div class="mg">'+cs.map(n=>`<button data-n="${n}">💗</button>`).join('')+'</div><p class="rs"></p>';let a=null,bl=0,k=0;
- el.querySelectorAll('button').forEach(b=>b.onclick=()=>{if(bl||b.dataset.o)return;b.dataset.o=1;b.innerHTML=`<img src="${U[b.dataset.n]}" alt="">`;if(!a){a=b;return}
-  if(a.dataset.n==b.dataset.n){a=null;if(++k==6)el.querySelector('.rs').textContent='¡Las encontraste todas! Siempre nos encontramos 💞'}
-  else{bl=1;setTimeout(()=>{[a,b].forEach(x=>{x.textContent='💗';delete x.dataset.o});a=null;bl=0},900)}})}
-function atr(el){el.innerHTML='<b id="ap">0</b> / 10 <button class="bt" id="ag">Empezar 💘</button><div id="cj"></div>';let n=0,t;
- $('ag').onclick=()=>{n=0;$('ap').textContent=0;$('cj').innerHTML='';clearInterval(t);t=setInterval(()=>{const h=document.createElement('span');h.className='cae';h.textContent=rnd(['💖','💋','💗','😘']);h.style.left=Math.random()*85+'%';
-  h.onclick=()=>{h.remove();$('ap').textContent=++n;if(n>=10){clearInterval(t);$('cj').innerHTML='<p class="rs" style="padding-top:90px">¡Me atrapaste el corazón! Ya lo tenías hace rato 💘</p>'}};
-  $('cj').appendChild(h);requestAnimationFrame(()=>requestAnimationFrame(()=>h.style.top='260px'));setTimeout(()=>h.remove(),3200)},650)}}
-function rul(el){el.innerHTML='<button class="bt" id="gr">Girar la ruleta 🔮</button><p class="rs" id="rr"></p>';$('gr').onclick=()=>{let k=0;const t=setInterval(()=>$('rr').textContent=['🔮','✨','💫','🌙'][k++%4],150);setTimeout(()=>{clearInterval(t);$('rr').textContent=rnd(RUL)},1000)}}
-function juegos(){const L=[['Preguntas del corazón 💘',quiz],['Memoria de nosotros 🧠',memo],['Atrapa mis besos 💋',atr],['La ruleta del destino 🔮',rul]];
- $('jg').innerHTML=L.map(([t])=>`<div class="jg"><h3>${t}</h3><div></div></div>`).join('');[...$('jg').children].forEach((c,i)=>L[i][1](c.lastChild))}
-document.querySelectorAll('.rv:not(.ver)').forEach(x=>ob.observe(x));
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
-</script></body></html>
+function hist(){const k=Math.max(1,Math.ceil(ok.l
